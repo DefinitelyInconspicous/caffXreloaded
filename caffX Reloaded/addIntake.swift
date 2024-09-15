@@ -3,7 +3,7 @@ import SwiftUI
 // Helper function to get time in "HH:mm" format from Date
 func hour24(from date: Date) -> String {
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "HH:mm"
+    dateFormatter.dateFormat = "HH"
     return dateFormatter.string(from: date)
 }
 
@@ -12,7 +12,6 @@ func hour24(from date: Date) -> String {
 struct addIntake: View {
     @Binding var intakeGraph: [caffEntry]  // Binding to update the main graph
     @State var date: Date
-    @Binding var firstint: Bool             // Track if it's the first intake
     @State var selectedDate = Date()        // Date for the intake
     @State var customDrink: String          // For custom drink name
     @State var selectedDrink: drink         // Selected drink from picker
@@ -48,12 +47,14 @@ struct addIntake: View {
             }
             
             // Section for custom drink input
-            Section {
-                TextField("Custom Drink", text: $customDrink)
-                    .font(.headline)
-                TextField("Caff amount", value: $currCaff, format: .number)
-                    .font(.headline)
-                    .keyboardType(.numberPad)
+            if selectedDrink.name == "Custom" {
+                Section {
+                    TextField("Custom Drink", text: $customDrink)
+                        .font(.headline)
+                    TextField("Caff amount", value: $currCaff, format: .number)
+                        .font(.headline)
+                        .keyboardType(.numberPad)
+                }
             }
             
             // Add intake button
@@ -61,11 +62,6 @@ struct addIntake: View {
                 // Calculate time since last intake
                 let intCaff = selectedDrink.name == "Custom" ? currCaff : selectedDrink.caff
                 let calcTime = Double(hour24(from: selectedDate)) ?? 0.0
-                
-                if !firstint {
-                    intakeGraph.remove(at: 0)
-                    firstint = true
-                }
                 
                 if calcTime >= 24 {
                     wrongDate = true
@@ -87,5 +83,5 @@ struct addIntake: View {
 }
 
 #Preview {
-    addIntake(intakeGraph: .constant([]), date: .now, firstint: .constant(false), customDrink: "", selectedDrink: drink(name: "", caff: 0))
+    addIntake(intakeGraph: .constant([]), date: .now, customDrink: "", selectedDrink: drink(name: "", caff: 0))
 }
