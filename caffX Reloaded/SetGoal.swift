@@ -7,11 +7,15 @@
 
 import SwiftUI
 import Combine
+import Forever
 
 struct SetGoal: View {
-    @State var goalDate: Date
-    @State var intakeGoal = "100"
+    @Binding var goalDate: Date
+    @Binding var intakeGoal: String
     @Binding var currentIntake: Double
+    @State var currIntake = ""
+    @Forever(wrappedValue: "", "intakeGoal") var savedGoal: String
+    @Environment(\.dismiss) private var dismiss
     var body: some View {
         NavigationStack {
             Form {
@@ -19,7 +23,7 @@ struct SetGoal: View {
                     HStack {
                         Text("Current Daily Intake")
                         Spacer()
-                        TextField("Daily Intake", text: $intakeGoal)
+                        TextField("Daily Intake", text: $currIntake)
                             .keyboardType(.numberPad)
                             .onReceive(Just(intakeGoal)) { newValue in
                                 let filtered = newValue.filter { "0123456789".contains($0) }
@@ -55,7 +59,7 @@ struct SetGoal: View {
                               
                 }
                 Button{
-                    
+                    dismiss()
                 } label: {
                     HStack {
                         Spacer()
@@ -68,10 +72,27 @@ struct SetGoal: View {
             }
             .navigationTitle("Set Goal")
             
+            if Double(savedGoal) != 0 {
+                Button {
+                    intakeGoal = "0"
+                    goalDate = .now
+                } label: {
+                    Text("Delete Goal")
+                        .foregroundStyle(.red)
+                        .fontWeight(.medium)
+                }
+            }
+            
+            
+            
+        }
+        .onAppear() {
+            currIntake = String(currentIntake)
+            currentIntake = Double(currIntake) ?? 0
         }
     }
 }
 
 #Preview {
-    SetGoal(goalDate: .now, currentIntake: .constant(0))
+    SetGoal(goalDate: .constant(.now), intakeGoal: .constant("0"), currentIntake: .constant(0))
 }

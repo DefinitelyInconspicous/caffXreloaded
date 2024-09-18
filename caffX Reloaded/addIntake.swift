@@ -11,6 +11,7 @@ func hour24(from date: Date) -> String {
 // Intake entry view
 struct addIntake: View {
     @Binding var intakeGraph: [caffEntry]  // Binding to update the main graph
+    @Binding var logbook: [log]
     @State var date: Date
     @State var selectedDate = Date()        // Date for the intake
     @State var customDrink: String          // For custom drink name
@@ -61,12 +62,12 @@ struct addIntake: View {
             Button {
                 // Calculate time since last intake
                 let intCaff = selectedDrink.name == "Custom" ? currCaff : selectedDrink.caff
-                let calcTime = Double(hour24(from: selectedDate)) ?? 0.0
                 
-                if calcTime >= 24 {
+                if selectedDate > .now {
                     wrongDate = true
                 } else {
-                    let newEntry = caffEntry(caff: intCaff, time: calcTime)
+                    let newEntry = caffEntry(caff: intCaff, time: Double(hour24(from: selectedDate)) ?? 0)
+                    logbook.append(log(caff: selectedDrink.caff, name: selectedDrink.name, date: selectedDate))
                     intakeGraph.append(newEntry)
                     intakeGraph.sort { $0.time < $1.time }
                     dismiss()
@@ -83,5 +84,5 @@ struct addIntake: View {
 }
 
 #Preview {
-    addIntake(intakeGraph: .constant([]), date: .now, customDrink: "", selectedDrink: drink(name: "", caff: 0))
+    addIntake(intakeGraph: .constant([]), logbook: .constant([log(caff: 0, name: "", date: .now)]), date: .now, customDrink: "", selectedDrink: drink(name: "Espresso", caff: 64))
 }

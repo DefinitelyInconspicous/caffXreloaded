@@ -8,25 +8,27 @@
 import SwiftUI
 
 struct Settings: View {
-    @State var limit = 400
+    @Binding var hardLimit: Int
     var body: some View {
-        HStack {
-            Text("Limit")
-            Button {
-                
-            } label: {
-                Image(systemName: "info.circle.fill")
-            }
-            Spacer()
-            Picker(selection: $limit, label: Text("Numbers")) {
-                ForEach(0...999, id: \.self) { number in
-                    Text(String(number))
+        Section {
+            HStack {
+                Text("Hard Limit")
+                Button {
+                    LimitInfo()
+                } label: {
+                    Image(systemName: "info.circle.fill")
                 }
-            }.pickerStyle(.wheel)
+                Spacer()
+                Picker(selection: $hardLimit, label: Text("Numbers")) {
+                    ForEach(0...1000, id: \.self) { number in
+                        Text(String(number))
+                    }
+                }.pickerStyle(.wheel)
+            }
         }
     }
 }
 
 #Preview {
-    Settings()
+    Settings(hardLimit: .constant(400))
 }

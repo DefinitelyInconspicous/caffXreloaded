@@ -1,6 +1,7 @@
 import SwiftUI
 import Charts
 import Forever
+import TipKit
 
 struct caffEntry: Identifiable, Codable, Equatable {
     var id = UUID()
@@ -8,40 +9,114 @@ struct caffEntry: Identifiable, Codable, Equatable {
     var time: Double
 }
 
+struct log: Identifiable, Codable, Equatable {
+    var id = UUID()
+    var caff: Double
+    var name: String
+    var date: Date
+}
+
 struct ContentView: View {
     
     @State var add = false
-    @State var customDrink: String
-    @State var entryDate: Date
-    @State var selectedDrink: drink
+    @State var customDrink: String = ""
+    @State var entryDate: Date = .now
+    @State var selectedDrink: drink = drink(name: "", caff: 0)
     @State var currCaff = 0.0
     @State var setGoal = false
+    @State var selectedView = 0
+    @State var hardLimit = 400
+    @State var currIntakeGoal = 0
+    @State var curravg = 0
+    @State var savedDate = Date.now.formatted(date: .abbreviated, time: .omitted)
+    let graphTip = graphBasic()
+    @Forever("intakeGoal") var intakeGoal = "0"
+    @Forever("goalDate") var goalDate: Date = .now
     
     @Forever("dailyAvg") var dailyAvg: Double = 0
+    
     @Forever(wrappedValue: [], "avgList") var avgList: [Double]
     
     @Forever("caffeineIntake") var caffIntake: [caffEntry] = []
     
+    @Forever("logbook") var logbook: [log] = []
+    
     @Forever("caffeineChart") var caffChart: [caffEntry] = [(caffEntry(caff: 0, time: 0)),(caffEntry(caff: 0, time: 1)),(caffEntry(caff: 0, time: 2)),(caffEntry(caff: 0, time: 3)),(caffEntry(caff: 0, time: 4)),(caffEntry(caff: 0, time: 5)),(caffEntry(caff: 0, time: 6)),(caffEntry(caff: 0, time: 7)),(caffEntry(caff: 0, time: 8)),(caffEntry(caff: 0, time: 9)),(caffEntry(caff: 0, time: 10)),(caffEntry(caff: 0, time: 11)),(caffEntry(caff: 0, time: 12)),(caffEntry(caff: 0, time: 13)),(caffEntry(caff: 0, time: 14)),(caffEntry(caff: 0, time: 15)),(caffEntry(caff: 0, time: 16)),(caffEntry(caff: 0, time: 17)),(caffEntry(caff: 0, time: 18)),(caffEntry(caff: 0, time: 19)),(caffEntry(caff: 0, time: 20)),(caffEntry(caff: 0, time: 21)),(caffEntry(caff: 0, time: 22)),(caffEntry(caff: 0, time: 23))]
     
     var body: some View {
+        
         NavigationStack {
-            Chart {
-                ForEach(caffChart) { entry in
-                    LineMark(
-                        x: .value("Time", entry.time),
-                        y: .value("Caffeine", entry.caff)
-                    )
-                    .foregroundStyle(.red)
-                    .interpolationMethod(.monotone)
+            Section {
+                VStack {
+                    if (logbook.filter({$0.date.formatted(date: .abbreviated, time: .omitted) == Date.now.formatted(date: .abbreviated, time: .omitted)}).reduce(0){$0 + $1.caff}) >= Double(currIntakeGoal) {
+                        Text("You've exceeded your goal by \((Int(logbook.filter({$0.date.formatted(date: .abbreviated, time: .omitted) == Date.now.formatted(date: .abbreviated, time: .omitted)}).reduce(0){$0 + $1.caff})) - currIntakeGoal)! Don't drink anymore!")
+                    }
+                    Chart {
+                        withAnimation {
+                            PointMark(x: .value("slide", selectedView), y: .value("Goal", caffChart[selectedView].caff))
+                        }
+                        
+                        ForEach(caffChart) { entry in
+                            LineMark(
+                                x: .value("Time", entry.time),
+                                y: .value("Caffeine", entry.caff)
+                            )
+                            .foregroundStyle(.red)
+                            .interpolationMethod(.monotone)
+                            
+                            RuleMark(
+                                xStart: .value("Start", 0),
+                                xEnd: .value("End", 23),
+                                y: .value("Limit", hardLimit)
+                            )
+                            .foregroundStyle(.purple)
+                            if (Double(intakeGoal) ?? 0) != 0 {
+                                RuleMark(
+                                    xStart: .value("Start", 0),
+                                    xEnd: .value("End", 23),
+                                    y: .value("Goal", currIntakeGoal)
+                                )
+                                
+                            }
+                        }
+                    }
+                    .popoverTip(graphTip)
+                    .padding()
+                    .frame(width: 330, height: 200)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                    .padding(.top, 20)
+                    .chartXScale(domain: 0...24)
+                    .chartForegroundStyleScale([
+                        "Intake": .red, "Daily Goal": .blue, "Hard Limit": .purple
+                    ])
+                    
+                    Section {
+                        VStack {
+                            HStack {
+                                
+                                Slider(
+                                    value: .init(
+                                        get: {
+                                            Double(selectedView)
+                                        },
+                                        set: {
+                                            selectedView = Int($0.rounded())
+                                        }
+                                    ),
+                                    in: 0...23
+                                )
+                                .frame(width: 300)
+                            }
+                            HStack {
+                                Text("Caffeine: ")
+                                Text(String(round(caffChart[selectedView].caff)))
+                            }
+                        }
+                        
+                    }
                 }
             }
-            .padding()
-            .frame(width: 330, height: 200)
-            .background(Color.gray.opacity(0.2))
-            .cornerRadius(10)
-            .padding(.top, 20)
-            .chartXScale(domain: 0...24) // Set x-axis range to 24 hours
             
             Button {
                 add = true
@@ -59,11 +134,35 @@ struct ContentView: View {
             Button {
                 setGoal = true
             } label: {
-                Text("Set Goal")
+                if (Double(intakeGoal) ?? 0) == 0 {
+                    Text("Set Goal")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                } else {
+                    Text("Edit Goal")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                
+            }
+            .padding(.horizontal, 20)
+            
+            NavigationLink {
+                Logbook(logbook: $logbook)
+            } label: {
+                Text("Logbook")
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.green)
+                    .background(Color.yellow)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
@@ -72,6 +171,7 @@ struct ContentView: View {
             Button {
                 caffIntake = []
                 caffChart = []
+                logbook = []
                 for i in 0...23 {
                     caffChart.append(caffEntry(caff: 0, time: Double(i)))
                 }
@@ -91,27 +191,38 @@ struct ContentView: View {
             .padding(.horizontal, 20)
             Spacer()
                 .navigationTitle("caffX")
-            
+                .toolbar() {
+                    ToolbarItem {
+                        NavigationLink {
+                            Settings(hardLimit: $hardLimit)
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .imageScale(.large)
+                        }
+                    }
+                }
         }
         .onChange(of: caffIntake) {
             processCaffeineIntakeData()
         }
         .onAppear {
             processCaffeineIntakeData()
+            processGoal()
+            dateProcess()
+            
         }
         .sheet(isPresented: $add) {
-            addIntake(intakeGraph: $caffIntake, date: entryDate, customDrink: customDrink, selectedDrink: selectedDrink)
+            addIntake(intakeGraph: $caffIntake, logbook: $logbook, date: entryDate, customDrink: customDrink, selectedDrink: selectedDrink)
                 .presentationDetents([.medium])
         }
         .sheet(isPresented: $setGoal) {
-            SetGoal(goalDate: .now, currentIntake: $dailyAvg)
+            SetGoal(goalDate: $goalDate, intakeGoal: $intakeGoal, currentIntake: $dailyAvg)
+                .presentationDetents([.medium])
         }
     }
-    
-    // Helper to reset the graph data
-    private func processCaffeineIntakeData() {
+
+    func processCaffeineIntakeData() {
         let halfLife = 5.5
-        let currentTime = hour24(from: Date())
         
         var newCaffChart: [caffEntry] = []
         for i in 0...23 {
@@ -151,6 +262,28 @@ struct ContentView: View {
         // adds to main graph
         caffChart = newCaffChart
     }
+    func dateProcess() {
+        if (savedDate != (Date.now.formatted(date: .abbreviated, time: .omitted))) {
+            for i in logbook.filter({$0.date.formatted(date: .abbreviated, time: .omitted) == Date.now.formatted(date: .abbreviated, time: .omitted)}) {
+                curravg += Int(i.caff)
+            }
+            avgList.append(Double(curravg))
+            dailyAvg = Double((avgList.reduce(0) {$0 + Int($1)}) / avgList.count)
+            caffIntake = []
+            caffChart = []
+            logbook = []
+            for i in 0...23 {
+                caffChart.append(caffEntry(caff: 0, time: Double(i)))
+            }
+        }
+    }
+    func processGoal() {
+        let daysLeft = ((Int(hour24(from: goalDate)) ?? 0) - (Int(hour24(from: .now)) ?? 0)) / 24
+        let change = (Int(dailyAvg)) - (Int(intakeGoal) ?? 0)
+        let difference = round(Double(change / (daysLeft != 0 ?  daysLeft : 1)))
+        currIntakeGoal = (Int(dailyAvg)) - Int(difference)
+    }
+    
 }
 
 #Preview {

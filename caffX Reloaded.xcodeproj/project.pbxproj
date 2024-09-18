@@ -16,6 +16,9 @@
 		815F162B2C8C27B700E1E471 /* drinkList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815F162A2C8C27B700E1E471 /* drinkList.swift */; };
 		815F162D2C8C2ACB00E1E471 /* addIntake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815F162C2C8C2ACA00E1E471 /* addIntake.swift */; };
 		815F16302C8C31BE00E1E471 /* Forever in Frameworks */ = {isa = PBXBuildFile; productRef = 815F162F2C8C31BE00E1E471 /* Forever */; };
+		816901F22C97F7FB00F88C92 /* Logbook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816901F12C97F7FB00F88C92 /* Logbook.swift */; };
+		816901F62C982A7800F88C92 /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816901F52C982A7800F88C92 /* Tips.swift */; };
+		817D9B7A2C9A51BE00339801 /* dailyGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817D9B792C9A51BE00339801 /* dailyGraph.swift */; };
 		81AAF1012C93C50100AB652C /* LimitInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AAF1002C93C50100AB652C /* LimitInfo.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +32,9 @@
 		815F16232C8C272600E1E471 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		815F162A2C8C27B700E1E471 /* drinkList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = drinkList.swift; sourceTree = "<group>"; };
 		815F162C2C8C2ACA00E1E471 /* addIntake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addIntake.swift; sourceTree = "<group>"; };
+		816901F12C97F7FB00F88C92 /* Logbook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logbook.swift; sourceTree = "<group>"; };
+		816901F52C982A7800F88C92 /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
+		817D9B792C9A51BE00339801 /* dailyGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dailyGraph.swift; sourceTree = "<group>"; };
 		81AAF1002C93C50100AB652C /* LimitInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,12 +69,15 @@
 		815F161B2C8C272300E1E471 /* caffX Reloaded */ = {
 			isa = PBXGroup;
 			children = (
+				816901F52C982A7800F88C92 /* Tips.swift */,
+				816901F12C97F7FB00F88C92 /* Logbook.swift */,
 				81AAF1002C93C50100AB652C /* LimitInfo.swift */,
 				812205472C93BD0E00AE7DE1 /* Settings.swift */,
 				8101DB172C8EA33F000EEAD9 /* SetGoal.swift */,
 				815F162C2C8C2ACA00E1E471 /* addIntake.swift */,
 				815F161C2C8C272300E1E471 /* caffX_ReloadedApp.swift */,
 				815F161E2C8C272300E1E471 /* ContentView.swift */,
+				817D9B792C9A51BE00339801 /* dailyGraph.swift */,
 				815F162A2C8C27B700E1E471 /* drinkList.swift */,
 				815F16202C8C272600E1E471 /* Assets.xcassets */,
 				815F16222C8C272600E1E471 /* Preview Content */,
@@ -165,8 +174,11 @@
 				815F161F2C8C272300E1E471 /* ContentView.swift in Sources */,
 				8101DB182C8EA33F000EEAD9 /* SetGoal.swift in Sources */,
 				81AAF1012C93C50100AB652C /* LimitInfo.swift in Sources */,
+				816901F22C97F7FB00F88C92 /* Logbook.swift in Sources */,
 				815F161D2C8C272300E1E471 /* caffX_ReloadedApp.swift in Sources */,
 				815F162D2C8C2ACB00E1E471 /* addIntake.swift in Sources */,
+				817D9B7A2C9A51BE00339801 /* dailyGraph.swift in Sources */,
+				816901F62C982A7800F88C92 /* Tips.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +315,8 @@
 				DEVELOPMENT_TEAM = 42V9477C3N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = caffX;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -332,6 +346,8 @@
 				DEVELOPMENT_TEAM = 42V9477C3N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = caffX;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
