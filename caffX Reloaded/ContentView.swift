@@ -64,7 +64,6 @@ struct ContentView: View {
                                 .fontWeight(.heavy)
                                 .foregroundStyle(.red)
                                 .padding()
-                                .animation(.easeInOut)
                         }
                     }
                     Chart {
@@ -312,6 +311,7 @@ struct ContentView: View {
         
         // Update current intake goal
         currIntakeGoal = targetIntake + Int(difference)
+        chartUpdateTrigger.toggle()
     }
 
     

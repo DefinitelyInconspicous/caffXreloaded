@@ -94,7 +94,7 @@ struct addIntake: View {
                                 Text(favorite.name)
                                     .bold()
                                 Spacer()
-                                Text("\(round(favorite.caff)) mg")
+                                Text("\(Int(favorite.caff)) mg")
                                     .foregroundStyle(.gray)
                             }
                         }
@@ -138,8 +138,8 @@ struct addIntake: View {
     
     // Function to auto-add favorite intake
     func autoAddFavorite(_ favorite: drink) {
-        let newEntry = caffEntry(caff: favorite.caff, time: Double(hour24(from: .now)) ?? 0)
-        logbook.append(log(caff: favorite.caff, name: favorite.name, date: .now))
+        let newEntry = caffEntry(caff: favorite.caff, time: Double(hour24(from: selectedDate)) ?? 0)
+        logbook.append(log(caff: favorite.caff, name: favorite.name, date: selectedDate))
         intakeGraph.append(newEntry)
         intakeGraph.sort { $0.time < $1.time }
         dismiss()
