@@ -1,0 +1,16 @@
+"filename", "language", "Swift", "JSON", "comment", "blank", "total"
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Assets.xcassets/AccentColor.colorset/Contents.json", "JSON", 0, 11, 0, 1, 12
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Assets.xcassets/AppIcon.appiconset/Contents.json", "JSON", 0, 14, 0, 1, 15
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Assets.xcassets/Contents.json", "JSON", 0, 6, 0, 1, 7
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/ContentView.swift", "Swift", 253, 0, 5, 34, 292
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/LimitInfo.swift", "Swift", 9, 0, 6, 4, 19
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Logbook.swift", "Swift", 47, 0, 6, 6, 59
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Preview Content/Preview Assets.xcassets/Contents.json", "JSON", 0, 6, 0, 1, 7
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/SetGoal.swift", "Swift", 79, 0, 6, 14, 99
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Settings.swift", "Swift", 25, 0, 6, 4, 35
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Tips.swift", "Swift", 43, 0, 6, 7, 56
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/addIntake.swift", "Swift", 70, 0, 8, 11, 89
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/caffX_ReloadedApp.swift", "Swift", 9, 0, 6, 3, 18
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/dailyGraph.swift", "Swift", 19, 0, 8, 4, 31
+"/Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/drinkList.swift", "Swift", 29, 0, 6, 5, 40
+"Total", "-", 583, 37, 63, 96, 779

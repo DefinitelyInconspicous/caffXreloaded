@@ -1,0 +1,47 @@
+Date : 2024-09-18 08:28:30
+Directory : /Users/AM/Documents/Swift/caffX Reloaded
+Total : 14 files,  620 codes, 63 comments, 96 blanks, all 779 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Swift    |         10 |        583 |         63 |         92 |        738 |
+| JSON     |          4 |         37 |          0 |          4 |         41 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                          | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                             |         14 |        620 |         63 |         96 |        779 |
+| caffX Reloaded                                                                                                |         14 |        620 |         63 |         96 |        779 |
+| caffX Reloaded (Files)                                                                                        |         10 |        583 |         63 |         92 |        738 |
+| caffX Reloaded/Assets.xcassets                                                                                |          3 |         31 |          0 |          3 |         34 |
+| caffX Reloaded/Assets.xcassets (Files)                                                                        |          1 |          6 |          0 |          1 |          7 |
+| caffX Reloaded/Assets.xcassets/AccentColor.colorset                                                           |          1 |         11 |          0 |          1 |         12 |
+| caffX Reloaded/Assets.xcassets/AppIcon.appiconset                                                             |          1 |         14 |          0 |          1 |         15 |
+| caffX Reloaded/Preview Content                                                                                |          1 |          6 |          0 |          1 |          7 |
+| caffX Reloaded/Preview Content/Preview Assets.xcassets                                                        |          1 |          6 |          0 |          1 |          7 |
++---------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                      | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Assets.xcassets/AccentColor.colorset/Contents.json    | JSON     |         11 |          0 |          1 |         12 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Assets.xcassets/AppIcon.appiconset/Contents.json      | JSON     |         14 |          0 |          1 |         15 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Assets.xcassets/Contents.json                         | JSON     |          6 |          0 |          1 |          7 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/ContentView.swift                                     | Swift    |        253 |          5 |         34 |        292 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/LimitInfo.swift                                       | Swift    |          9 |          6 |          4 |         19 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Logbook.swift                                         | Swift    |         47 |          6 |          6 |         59 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Preview Content/Preview Assets.xcassets/Contents.json | JSON     |          6 |          0 |          1 |          7 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/SetGoal.swift                                         | Swift    |         79 |          6 |         14 |         99 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Settings.swift                                        | Swift    |         25 |          6 |          4 |         35 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/Tips.swift                                            | Swift    |         43 |          6 |          7 |         56 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/addIntake.swift                                       | Swift    |         70 |          8 |         11 |         89 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/caffX_ReloadedApp.swift                               | Swift    |          9 |          6 |          3 |         18 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/dailyGraph.swift                                      | Swift    |         19 |          8 |          4 |         31 |
+| /Users/AM/Documents/Swift/caffX Reloaded/caffX Reloaded/drinkList.swift                                       | Swift    |         29 |          6 |          5 |         40 |
+| Total                                                                                                         |          |        620 |         63 |         96 |        779 |
++---------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

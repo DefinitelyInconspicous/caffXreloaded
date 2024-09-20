@@ -3,6 +3,13 @@ import Charts
 import Forever
 import TipKit
 
+extension Date {
+    static func - (lhs: Date, rhs: Date) -> TimeInterval {
+        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+    }
+
+}
+
 struct caffEntry: Identifiable, Codable, Equatable {
     var id = UUID()
     var caff: Double
@@ -29,7 +36,9 @@ struct ContentView: View {
     @State var currIntakeGoal = 0
     @State var curravg = 0
     @State var savedDate = Date.now.formatted(date: .abbreviated, time: .omitted)
-    let graphTip = graphBasic()
+    @State var chartUpdateTrigger = false
+   
+    
     @Forever("intakeGoal") var intakeGoal = "0"
     @Forever("goalDate") var goalDate: Date = .now
     
@@ -48,12 +57,21 @@ struct ContentView: View {
         NavigationStack {
             Section {
                 VStack {
-                    if (logbook.filter({$0.date.formatted(date: .abbreviated, time: .omitted) == Date.now.formatted(date: .abbreviated, time: .omitted)}).reduce(0){$0 + $1.caff}) >= Double(currIntakeGoal) {
-                        Text("You've exceeded your goal by \((Int(logbook.filter({$0.date.formatted(date: .abbreviated, time: .omitted) == Date.now.formatted(date: .abbreviated, time: .omitted)}).reduce(0){$0 + $1.caff})) - currIntakeGoal)! Don't drink anymore!")
+                   
+                        if (logbook.filter({$0.date.formatted(date: .abbreviated, time: .omitted) == Date.now.formatted(date: .abbreviated, time: .omitted)}).reduce(0){$0 + $1.caff}) > Double(currIntakeGoal) {
+                            withAnimation {
+                            Text("You've exceeded your goal by \((Int(logbook.filter({$0.date.formatted(date: .abbreviated, time: .omitted) == Date.now.formatted(date: .abbreviated, time: .omitted)}).reduce(0){$0 + $1.caff})) - currIntakeGoal) mg! Don't drink anymore!")
+                                .fontWeight(.heavy)
+                                .foregroundStyle(.red)
+                                .padding()
+                                .animation(.easeInOut)
+                        }
                     }
                     Chart {
                         withAnimation {
                             PointMark(x: .value("slide", selectedView), y: .value("Goal", caffChart[selectedView].caff))
+                                .foregroundStyle(.red)
+                                
                         }
                         
                         ForEach(caffChart) { entry in
@@ -80,16 +98,19 @@ struct ContentView: View {
                             }
                         }
                     }
-                    .popoverTip(graphTip)
                     .padding()
                     .frame(width: 330, height: 200)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color(.systemGray5))
+                            .shadow(radius: 5)
+                    )
                     .padding(.top, 20)
                     .chartXScale(domain: 0...24)
                     .chartForegroundStyleScale([
                         "Intake": .red, "Daily Goal": .blue, "Hard Limit": .purple
                     ])
+                    .id(chartUpdateTrigger)
                     
                     Section {
                         VStack {
@@ -125,7 +146,7 @@ struct ContentView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(.red)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
@@ -139,7 +160,7 @@ struct ContentView: View {
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.green)
+                        .background(.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 } else {
@@ -147,7 +168,7 @@ struct ContentView: View {
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.green)
+                        .background(.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -162,36 +183,30 @@ struct ContentView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.yellow)
+                    .background(.gray)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
             .padding(.horizontal, 20)
             
-            Button {
-                caffIntake = []
-                caffChart = []
-                logbook = []
-                for i in 0...23 {
-                    caffChart.append(caffEntry(caff: 0, time: Double(i)))
-                }
-            } label: {
-                Text("Delete All")
-                    .fontWeight(.bold)
-                    .foregroundColor(.red)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.red, lineWidth: 2)
-                    )
-            }
-            .padding(.horizontal, 20)
+            
             Spacer()
                 .navigationTitle("caffX")
                 .toolbar() {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(role: .destructive) {
+                            caffIntake = []
+                            caffChart = []
+                            logbook = []
+                            for i in 0...23 {
+                                caffChart.append(caffEntry(caff: 0, time: Double(i)))
+                            }
+                        } label: {
+                            Image(systemName: "trash")
+                                .foregroundStyle(.red)
+                                
+                        }
+                    }
                     ToolbarItem {
                         NavigationLink {
                             Settings(hardLimit: $hardLimit)
@@ -200,7 +215,11 @@ struct ContentView: View {
                                 .imageScale(.large)
                         }
                     }
+                    
                 }
+        }
+        .background() {
+            Image("lbg")
         }
         .onChange(of: caffIntake) {
             processCaffeineIntakeData()
@@ -261,6 +280,7 @@ struct ContentView: View {
         
         // adds to main graph
         caffChart = newCaffChart
+        chartUpdateTrigger.toggle()
     }
     func dateProcess() {
         if (savedDate != (Date.now.formatted(date: .abbreviated, time: .omitted))) {
@@ -278,11 +298,22 @@ struct ContentView: View {
         }
     }
     func processGoal() {
-        let daysLeft = ((Int(hour24(from: goalDate)) ?? 0) - (Int(hour24(from: .now)) ?? 0)) / 24
-        let change = (Int(dailyAvg)) - (Int(intakeGoal) ?? 0)
-        let difference = round(Double(change / (daysLeft != 0 ?  daysLeft : 1)))
-        currIntakeGoal = (Int(dailyAvg)) - Int(difference)
+        let daysLeft = max(1, goalDate.timeIntervalSinceNow / 86400) // Convert seconds to days
+        print(daysLeft)
+        
+        let currentIntake = Int(dailyAvg)
+        let targetIntake = Int(intakeGoal) ?? 0
+        let change = currentIntake - targetIntake
+        print(change)
+        
+        // Calculate the difference per day
+        let difference = round(Double(change) / Double(daysLeft))
+        print(difference)
+        
+        // Update current intake goal
+        currIntakeGoal = targetIntake + Int(difference)
     }
+
     
 }
 
